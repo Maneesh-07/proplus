@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proplus/services/api_call.dart';
 import 'package:proplus/views/home/widgets/main_page.dart';
 
@@ -101,19 +102,24 @@ class LoginPage extends StatelessWidget {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                ApiClass().login(emailController.text,
-                                    passwordController.text);
-                                Future.delayed(
-                                  const Duration(seconds: 3),
-                                  () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                               ScreenMainPage(),
-                                        ));
-                                  },
-                                );
+                                final email = emailController.text;
+                                final password = passwordController.text;
+
+                                if (email.isNotEmpty && password.isNotEmpty) {
+                                  ApiClass().login(email, password);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScreenMainPage(),
+                                    ),
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "Enter the Details",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    fontSize: 18.0,
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(500, 60),
